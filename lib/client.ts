@@ -8,6 +8,7 @@ export class Client extends GaroonClient {
     private authentication?: {Username: string, Password: string};
     private session?: {headerName: string, sessionId: string};
     private httpClient: soap.HttpClient;
+    private extraHeaders?: {[key:string] : any};
 
     constructor(options: Option) {
         super();
@@ -28,8 +29,11 @@ export class Client extends GaroonClient {
                                 callback(err, res, rewritedBody);
                             }
                         }, exheaders, exoptions);
-                    }}
+                    }},
+                    wsdl_headers: options.extraHeaders,
+                    endpoint: options.endpoint
                 };
+                this.extraHeaders = options.extraHeaders;
                 soap.createClient(options.url, clientOption, (err: any, client: soap.Client & RPC) => {
                     if (err) {
                         reject(err);
@@ -84,7 +88,7 @@ export class Client extends GaroonClient {
                     } else {
                         resolve(<O>result["returns"]);
                     }
-                });
+                }, null, this.extraHeaders);
             });
         });
     }
