@@ -836,6 +836,7 @@ export interface MemberTypeOrganization {
 }
 export interface MemberTypeFacilityAttribute {
     id: base.IDType;
+    name?: string;
     order?: number;
 }
 export interface MemberTypeFacility {
